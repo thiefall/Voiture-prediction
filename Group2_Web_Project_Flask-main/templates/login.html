@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login page</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background:
+                    linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+                    url('https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+                background-size: cover;
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            
+            .login-box {
+                background-color: white;
+                padding: 2rem;
+                border-radius: 10px;
+                box-shadow: 0 0 10px #ccc;
+                width: 500px;
+            }
+            .login-box input {
+                width: 100%;
+                padding: 0.5rem;
+                margin: 0.7rem 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .login-box button {
+                width: 100%;
+                padding: 0.6rem;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .message {
+                text-align: center;
+                margin-top: 1rem;
+                font-weight: bold;
+            }
+            .success { color: green; }
+            .error { color: red; }
+
+            
+        </style>
+    </head>
+    <body>
+        <div class="login-box">
+            <h1 class="text-center mt-4">Car price prediction</h1>
+        <p class="lead text-center mb-4" style="color: black;">
+            <b>This website developped using Flask API can help you to predict the price of your car from its features.</b>
+        </p>
+            <h2>Login</h2>
+            
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
+
+                    <form method="POST" class="p-4 bg-white bg-opacity-75">
+                        <label for="username">Username :</label>
+                        <input type="text" name="username" required>
+
+                        <label for="password">Password :</label>
+                        <input type="password" name="password" required>
+
+                        <button type="submit">Connect</button>
+
+                        <p class="message text-center">Don't have an account?
+                            <a href="{{ url_for('signup') }}">Signup</a>
+                        </p>
+                    </form>
+                </div>
+            
+        </div>
+    </body>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</html>

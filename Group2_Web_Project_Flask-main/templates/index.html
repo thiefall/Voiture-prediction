@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Predict car price</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background:
+                    linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+                    url('https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+                background-size: cover;
+                min-height: 100vh;
+            }
+
+            .content-wrapper {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            .card-form {
+                background-color: rgba(255, 255, 255, 0.95);
+                padding: 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            }
+
+            .btn-signout {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            .form-header {
+                background: linear-gradient(to right, #1d4e89, #2196f3); /* Bleu foncé → bleu clair */
+                padding: 20px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                border-bottom: 4px solid #ff6f00; /* Trait orange dessous */
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .prediction-container {
+                background-color: #f4f8f9;
+                border-radius: 15px;
+                border: 2px solid #28a745;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 25px;
+                margin-top: 20px;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .prediction-container h2 {
+                font-size: 1.75rem;
+                font-weight: bold;
+                color: #28a745;
+            }
+
+            .prediction-container h3 {
+                font-size: 1.5rem;
+                font-weight: 500;
+                color: #f39c12;
+            }
+
+            .prediction-container span {
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+            header {
+                background: linear-gradient(to right, #1d3557, #457b9d);
+                color: white;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            .carousel img{
+                height: 150px;
+                width: auto;
+                object-fit: contain;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            .carousel-item {
+                transition: transform 0.8s ease-in-out;
+            }
+            .carousel-control-prev-icon, .carousel-control-next-icon {
+                background-color: rgba(0, 0, 0, 0.6);
+                border-radius: 50%;
+                padding: 15px;
+                }
+        </style>
+    </head>
+    <body>
+        <header class="navbar navbar-expand-lg navbar-dark bg-primary px-4 py-3 shadow">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+                <h1 class="navbar-brand mb-0">🚗 Car Price Predictor | Hello, <strong>{{ username }}</strong>!</h1>
+            
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!--nav menu-->
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-4">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('index') }}">Home</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('help') }}">Help</a>
+                      </li>
+                    </ul>
+    
+                    <div class="d-flex">
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">Sign out</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <br>
+        <div id="carouselVoitures" class="carousel slide" data-bs-ride="carousel" >
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                  <img src="{{ url_for('static', filename='images/car1.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car2.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car3.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car7.jpeg') }}" class="carousel-img">
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                  <img src="{{ url_for('static', filename='images/car4.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car5.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car6.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car8.jpeg') }}" class="carousel-img">
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                  <img src="{{ url_for('static', filename='images/car9.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car10.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car11.jpeg') }}" class="carousel-img">
+                  <img src="{{ url_for('static', filename='images/car12.jpeg') }}" class="carousel-img">
+                </div>
+              </div>
+            </div>
+          
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselVoitures" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselVoitures" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+
+       <br>
+
+
+        <div class="d-flex justify-content-center mt-5">
+            <div class="card-form shadow" style="max-width: 800px; width: 100%; border-radius: 10px; overflow: hidden;">
+                <div class="form-header text-white text-center py-3">
+                    <h2 class="fw-bold mb-0">Let's estimate your car price 🚗</h2>
+                </div>
+                <form method="post"  class="p-4 bg-white bg-opacity-75">
+                    <table >
+                        <tr>
+                            <td>Car brand :</td>
+                            <td>
+                                <select name="CarBrand" class="form-select">
+                                    <option value="bmw">BMW</option>
+                                    <option value='audi'>Audi</option>
+                                    <option value='nissan'>Nissan</option>
+                                    <option value='saab'>SAAB</option>
+                                    <option value='buick'>Buick</option>
+                                    <option value="toyota">Toyota</option>
+                                    <option value="subaru">Subaru</option>
+                                    <option value="volkswagen">Volkswagen</option>
+                                    <option value="mazda">Mazda</option>
+                                    <option value="chevrolet">Chevrolet</option>
+                                    <option value="mitsubishi">Mitsubishi</option>
+                                    <option value="honda">Honda</option>
+                                    <option value="dodge">Dodge</option>
+                                    <option value="volvo">Volvo</option>
+                                    <option value="plymouth">Plymouth</option>
+                                    <option value="isuzu">Isuzu</option>
+                                    <option value="peugeot">Peugeot</option>
+                                    <option value="porsche">Porsche</option>
+                                    <option value="mercury">Mercury</option>
+                                    <option value="alfa-romero">Alfa-romero</option>
+                                    <option value="jaguar">Jaguar</option>
+                                    <option value="renault">Renault</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Symboling :</td>
+                            <td>
+                                <input type="number" name="symboling" class="form-control" value="1" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fuel type :</td>
+                            <td>
+                                <select name="fueltype" class="form-select">
+                                    <option value="gas">Gas</option>
+                                    <option value="diesel">Diesel</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Aspiration :</td>
+                            <td>
+                                <select name="aspiration" class="form-select">
+                                    <option value="std">Standard</option>
+                                    <option value="turbo">Turbo</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Door number :</td>
+                            <td>
+                                <select name="doornumber" class="form-select">
+                                    <option value="four">4</option>
+                                    <option value="two">2</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Car body :</td>
+                            <td>
+                                <select name="carbody" class="form-select">
+                                    <option value="sedan">Sedan</option>
+                                    <option value='hatchback'>Hatchback</option>
+                                    <option value='wagon'>Wagon</option>
+                                    <option value='hardtop'>Hard Top</option>
+                                    <option value='convertible'>Convertible</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Drive wheel :</td>
+                            <td>
+                                <select name="drivewheel" class="form-select">
+                                    <option value="rwd">RWD - Rear Wheel Drive</option>
+                                    <option value="4wd">4WD - Four Wheel Drive</option>
+                                    <option value="fwd">FWD - Front Wheel Drive</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>Engine location :</td>
+                            <td>
+                                <select name="enginelocation" class="form-select">
+                                    <option value="front">Front</option>
+                                    <option value="rear">Rear</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wheel base (in inches, 1 inch=2.54 cm):</td>
+                            <td>
+                                <input type="number" name="wheelbase" step="any" class="form-control" value="101" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Car length (in inches, 1 inch=2.54 cm):</td>
+                            <td>
+                                <input type="number" name="carlength" step="any" class="form-control" value="170" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Car width (in inches, 1 inch=2.54 cm):</td>
+                            <td>
+                                <input type="number" name="carwidth" step="any" class="form-control" value="66" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Car height (in inches, 1 inch=2.54 cm):</td>
+                            <td>
+                                <input type="number" name="carheight" step="any" class="form-control" value="54" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Curb weight (in livres, 1lb=0.45kg):</td>
+                            <td>
+                                <input type="number" name="curbweight" placeholder="Poids a vide" class="form-control" value="2400" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Engine type :</td>
+                            <td>
+                                <select name="enginetype" class="form-select">
+                                    <option value="ohc">OHC - Overhead Camshaft</option>
+                                    <option value="ohcf">OHCF - Overhead Camshaft Front</option>
+                                    <option value="ohcv">OHCV - Overhead Camshaft V-type</option>
+                                    <option value="l">L - Inline Engine</option>
+                                    <option value="rotor">Rotor - Rotary Engine</option>
+                                    <option value="dohc">DOHC - Dual Overhead Camshaft</option>
+                                    <option value="dohcv">DOHCV - Dual Overhead Camshaft V-type</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cylinder number :</td>
+                            <td>
+                                <select name="cylindernumber" class="form-select">
+                                    <option value="six">six</option>
+                                    <option value="five">five</option>
+                                    <option value="four">four</option>
+                                    <option value="eight">eight</option>
+                                    <option value="three">three</option>
+                                    <option value="two">two</option>
+                                    <option value="twelve">twelve</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Engine size (cm<sup>3</sup>):</td>
+                            <td>
+                                <input type="number" name="enginesize" class="form-control" value="165" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fuel system :</td>
+                            <td>
+                                <select name="fuelsystem" class="form-select">
+                                    <option value="mpfi">MPFI - Multi-Point Fuel Injection</option>
+                                    <option value="2bbl">2BBL - Two-Barrel Carburetor</option>
+                                    <option value="idi">IDI - Indirect Diesel Injection</option>
+                                    <option value="spdi">SPDI - Single Point Diesel Injection</option>
+                                    <option value="1bbl">1BBL - One-Barrel Carburetor</option>
+                                    <option value="4bbl">4BBL - Four-Barrel Carburetor</option>
+                                    <option value="mfi">MFI - Mechanical Fuel Injection</option>
+                                    <option value="spfi">SPFI - Single Point Fuel Injection</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Bore ratio :</td>
+                            <td>
+                                <input type="number" name="boreratio" step="any" class="form-control" value="3.1" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Stroke (in inches, 1 inch=2.54 cm):</td>
+                            <td>
+                                <input type="number" name="stroke" step="any" class="form-control" value="3.2" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Compression ratio :</td>
+                            <td>
+                                <input type="number" name="compressionratio" step="any" class="form-control" value="9.0" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Horse power (in hp, 1hp=1.01ch):</td>
+                            <td>
+                                <input type="number" name="horsepower" class="form-control" value="112" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Peak rpm (in rpm = tr/min):</td>
+                            <td>
+                                <input type="number" name="peakrpm" step="any" class="form-control" value="5000" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>City mpg (in mpg = L/100km):</td>
+                            <td>
+                                <input type="number" name="citympg" step="any" class="form-control" value="23" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>High way mpg (in mpg = L/100km):</td>
+                            <td> 
+                                <input type="number" name="highwaympg" step="any" class="form-control" value="29" required>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <input type="submit" value="Price" step="any" class="btn btn-success w-100">
+                        <input type="reset" value="Cancel" step="any" class="btn btn-danger w-100">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+
+        {% if prediction %}
+            <div class="prediction-container text-center my-4 p-4 bg-light rounded border border-success shadow-lg">
+                <h2 class="text-success fw-bold">Estimated price : <span class="text-primary"> {{ prediction }} $ </span></span></h2>
+                <h3 class="text-success fw-bold">Estimated price (FCFA) : <span class="text-primary">  {{ (prediction * 600) | round(0, 'ceil') }} FCFA </span></h3>
+            </div>
+            
+        {% endif %}
+
+        
+    </body>
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    
+</html> 

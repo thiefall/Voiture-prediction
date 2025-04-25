@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background:
+                linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+                url('https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .signup-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            width: 500px;
+        }
+
+        .signup-box input {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.7rem 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .signup-box button {
+            width: 100%;
+            padding: 0.6rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <div class="signup-box">
+        <h1 class="text-center mt-4">Create Account</h1>
+        <p class="lead text-center mb-4" style="color: black;">
+            <b>Create an account to start predicting car prices.</b>
+        </p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" class="p-4 bg-white bg-opacity-75">
+            <label for="username">Username :</label>
+            <input type="text" name="username" required>
+
+            <label for="password">Password :</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Sign up</button>
+        </form>
+
+        <p class="message text-center">Already have an account?
+            <a href="{{ url_for('login') }}">Log in</a>
+        </p>
+    </div>
+
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
