@@ -73,4 +73,4 @@ This project is licensed under the MIT License.
 
 ## Contact
 For any inquiries or feedback, please contact:
-- Email: [your.email@example.com](mailto:thiemokho.fall@aims-senengal.org)
+- Email: [thiemokho.fall@aims-senegal.org](mailto:thiemokho.fall@aims-senengal.org)
